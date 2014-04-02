@@ -1,6 +1,6 @@
 // Rachael Colley 2014
 
-package particle1;
+package colley.chisholm.diploma.fxparticle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.*;
 import javafx.stage.Stage;
 
-public  class ParticleCanvas extends Stage {
+public class ParticleCanvas extends Stage {
 
 	// Constant data members.
 	private final String STAGE_TITLE = "Particle Stage";
@@ -31,7 +31,7 @@ public  class ParticleCanvas extends Stage {
 	private Scene scene;
 	private Canvas canvas;
 
-	private  Paint[] colors = null;
+	private Paint[] colors = null;
 	private GraphicsContext graphicsContext;
 	private static AnimationTimer timer = null;
 
@@ -44,8 +44,7 @@ public  class ParticleCanvas extends Stage {
 	private final List<Particle> particles = new ArrayList<Particle>();
 	private List<Particle>[] checkList;
 
-
-	public  ParticleCanvas() {
+	public ParticleCanvas() {
 
 		initialiseMyStage();
 
@@ -60,23 +59,25 @@ public  class ParticleCanvas extends Stage {
 		// Get an AnimationTimer instance.
 		timer = new AnimationTimer() {
 
-			// ******* The handle method executes on each frame (roughly 60 times per second) *****
-			@Override public void handle(long now) {
+			// ******* The handle method executes on each frame (roughly 60
+			// times per second) *****
+			@Override
+			public void handle(long now) {
 
 				graphicsContext.setFill(Color.rgb(0, 0, 0, 0.2));
 				graphicsContext.fillRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
-				
-				checkList = new List[(int)canvas.getHeight()];
+
+				checkList = new List[(int) canvas.getHeight()];
 
 				drawParticles(graphicsContext);
 				updateParticles();
 
 				// Adds a new particle at specified interval.
 				if (countDownTillNextParticle == 0) {
-					countDownTillNextParticle = 5 + (int)(Math.random()*15);
+					countDownTillNextParticle = 5 + (int) (Math.random() * 15);
 					AddParticle();
 				}
-				countDownTillNextParticle --;
+				countDownTillNextParticle--;
 			}
 		};
 		// Start the timer.
@@ -84,15 +85,21 @@ public  class ParticleCanvas extends Stage {
 	}
 
 	private void AddParticle() {
-		
-		int randomx = makeRandomNumInRange(makeMinXCoord(), makeMaxXCoord()) + buffer;
-		int randomy = makeRandomNumInRange(makeMinYCoord(), makeMaxYCoord()) + buffer;
-		int randomTargetx = makeRandomNumInRange(makeMinXCoord(), makeMaxXCoord()) + buffer;
-		int randomTargety = makeRandomNumInRange(makeMinYCoord(), makeMaxYCoord()) + buffer;
-		//		int color = (int)(Math.random()* colors.length);
-		//		Particle p = new Particle(randomx, randomy, randomTargetx, randomTargety, particleWidth, particleHeight, colors[color]);
+
+		int randomx = makeRandomNumInRange(makeMinXCoord(), makeMaxXCoord())
+				+ buffer;
+		int randomy = makeRandomNumInRange(makeMinYCoord(), makeMaxYCoord())
+				+ buffer;
+		int randomTargetx = makeRandomNumInRange(makeMinXCoord(),
+				makeMaxXCoord()) + buffer;
+		int randomTargety = makeRandomNumInRange(makeMinYCoord(),
+				makeMaxYCoord()) + buffer;
+		// int color = (int)(Math.random()* colors.length);
+		// Particle p = new Particle(randomx, randomy, randomTargetx,
+		// randomTargety, particleWidth, particleHeight, colors[color]);
 		Color color = Color.WHITE;
-		Particle p = new Particle(randomx, randomy, randomTargetx, randomTargety, particleWidth, particleHeight, color);
+		Particle p = new Particle(randomx, randomy, randomTargetx,
+				randomTargety, particleWidth, particleHeight, color);
 
 		particles.add(p);
 		System.out.println("List size:  " + particles.size());
@@ -101,24 +108,25 @@ public  class ParticleCanvas extends Stage {
 	private void drawParticles(GraphicsContext gc) {
 		for (Particle p : particles) {
 			gc.setFill(p.getColor());
-			gc.fillOval(p.getPosx(), p.getPosy(), p.getWidth(), p.getHeight());			
-		}	
+			gc.fillOval(p.getPosx(), p.getPosy(), p.getWidth(), p.getHeight());
+		}
 	}
-	
+
 	public void updateParticles() {
-		for (Particle p: particles) {
+		for (Particle p : particles) {
 			p.update();
-			// Check if the current particle's y does not yet exist as an index of the array
+			// Check if the current particle's y does not yet exist as an index
+			// of the array
 			// and create a list of Particle at that index, if need be.
-			if (checkList[(int)p.getPosy()] == null) {
-				checkList[(int)p.getPosy()] = new ArrayList<Particle>();
+			if (checkList[(int) p.getPosy()] == null) {
+				checkList[(int) p.getPosy()] = new ArrayList<Particle>();
 			}
 			// Add the current particle to the array of lists at the index of y.
-			checkList[(int)p.getPosy()].add(p);
+			checkList[(int) p.getPosy()].add(p);
 			checkForColision(p);
 		}
 	}
-	
+
 	public boolean checkForColision(Particle p) {
 		// Field to scan is the Particle's current y
 		// minus particleSize and plus particleSize.
@@ -130,46 +138,43 @@ public  class ParticleCanvas extends Stage {
 		if (endRowIndex > checkList.length - 2) {
 			endRowIndex = checkList.length - 2;
 		}
-		
-		System.out.println("********CHECKING FOR COLLISION");
-		System.out.println("********START ROW INDEX: " + startRowIndex);
-		System.out.println("********END ROW INDEX: " + endRowIndex);
 
-		for (int x = startRowIndex; x <= endRowIndex; x ++) {
-			System.out.println("********START OUTER");
+		for (int x = startRowIndex; x <= endRowIndex; x++) {
+
 			// Get current list and check if it's not null.
 			List<Particle> l = checkList[x];
 			if (l != null) {
-				System.out.println("********START INNER");
+
 				// Loop through each Particle in the list.
-				for (int i = 0; i < l.size(); i++ ) {
+				for (int i = 0; i < l.size(); i++) {
 					// Get current Particle in the list.
 					Particle cp = l.get(i);
-					// If the current Particle in the list is the one 
+					// If the current Particle in the list is the one
 					// we are checking against (self), return.
 					if (cp == p) {
 						return false;
 					}
-					
-//					if ((cp.getPosx() + particleWidth) >= (p.getPosx()) &&
-//							(cp.getPosx()) <= (p.getPosx() + particleWidth)) {
-//						
-//						p.setWidth(50);
-//						p.setHeight(50);
-//						cp.setWidth(50);
-//						cp.setHeight(50);
-//						System.out.println("*****************COLLIDE");
-//						return true;
-//					}
-					
-					if ((cp.getPosx() + cp.getWidth()) >= (p.getPosx()) &&
-							(cp.getPosx()) <= (p.getPosx() + p.getWidth())) {
-						
+
+					// if ((cp.getPosx() + particleWidth) >= (p.getPosx()) &&
+					// (cp.getPosx()) <= (p.getPosx() + particleWidth)) {
+					//
+					// p.setWidth(50);
+					// p.setHeight(50);
+					// cp.setWidth(50);
+					// cp.setHeight(50);
+					// System.out.println("*****************COLLIDE");
+					// return true;
+					// }
+
+					if ((cp.getPosx() + cp.getWidth()) >= (p.getPosx())
+							&& (cp.getPosx()) <= (p.getPosx() + p.getWidth())) {
+
 						p.setWidth(10);
 						p.setHeight(10);
 						cp.setWidth(10);
 						cp.setHeight(10);
-						System.out.println("*****************COLLIDE");
+						System.out
+								.println("***************************************************COLLIDE********");
 						return true;
 					}
 				}
@@ -217,19 +222,15 @@ public  class ParticleCanvas extends Stage {
 	public void makeColors() {
 		// create a color palette of 180 colors
 		colors = new Paint[181];
-		colors[0] = new RadialGradient(0, 0, 0.5, 0.5, 0.5, true, CycleMethod.NO_CYCLE, 
-				new Stop(0, Color.WHITE),
-				new Stop(0.2, Color.hsb(59, 0.38, 1)),
-				new Stop(0.6, Color.hsb(59, 0.38, 1,0.1)),
-				new Stop(1, Color.hsb(59, 0.38, 1,0))
-				);
-		for (int h=0;h<360;h+=2) {
-			colors[1+(h/2)] = new RadialGradient(0, 0, 0.5, 0.5, 0.5, true, CycleMethod.NO_CYCLE, 
-					new Stop(0, Color.WHITE),
-					new Stop(0.2, Color.hsb(h, 1, 1)),
-					new Stop(0.6, Color.hsb(h, 1, 1,0.1)),
-					new Stop(1, Color.hsb(h, 1, 1,0))
-					);
+		colors[0] = new RadialGradient(0, 0, 0.5, 0.5, 0.5, true,
+				CycleMethod.NO_CYCLE, new Stop(0, Color.WHITE), new Stop(0.2,
+						Color.hsb(59, 0.38, 1)), new Stop(0.6, Color.hsb(59,
+						0.38, 1, 0.1)), new Stop(1, Color.hsb(59, 0.38, 1, 0)));
+		for (int h = 0; h < 360; h += 2) {
+			colors[1 + (h / 2)] = new RadialGradient(0, 0, 0.5, 0.5, 0.5, true,
+					CycleMethod.NO_CYCLE, new Stop(0, Color.WHITE), new Stop(
+							0.2, Color.hsb(h, 1, 1)), new Stop(0.6, Color.hsb(
+							h, 1, 1, 0.1)), new Stop(1, Color.hsb(h, 1, 1, 0)));
 		}
 	}
 
@@ -253,7 +254,7 @@ public  class ParticleCanvas extends Stage {
 
 		root.getChildren().add(canvas);
 
-		scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, Color.PINK);	
+		scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, Color.PINK);
 
 		this.setScene(scene);
 	}
@@ -261,7 +262,5 @@ public  class ParticleCanvas extends Stage {
 	private void print(Object value) {
 		System.out.println(value);
 	}
-
-
 
 }

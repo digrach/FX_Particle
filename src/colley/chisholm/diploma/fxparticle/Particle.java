@@ -1,6 +1,6 @@
 // Rachael Colley 2014
 
-package particle1;
+package colley.chisholm.diploma.fxparticle;
 
 import javafx.scene.paint.Paint;
 
@@ -35,14 +35,14 @@ public class Particle {
 		posy += calculateYDistance(targety) * (travelRate + randomEase);
 	}
 
-	private double  calculateYDistance(double yTarget) {
+	private double calculateYDistance(double yTarget) {
 		return yTarget - posy;
 	}
 
-	private double  calculateXDistance(double xTarget) {
+	private double calculateXDistance(double xTarget) {
 		return xTarget - posx;
 	}
-	
+
 	// Getters / setters....
 
 	public double getPosy() {
@@ -64,7 +64,7 @@ public class Particle {
 	public double getWidth() {
 		return width;
 	}
-	
+
 	public void setWidth(double width) {
 		this.width = width;
 	}
@@ -72,7 +72,7 @@ public class Particle {
 	public double getHeight() {
 		return height;
 	}
-	
+
 	public void setHeight(double height) {
 		this.height = height;
 	}
@@ -88,7 +88,5 @@ public class Particle {
 	public double getTravelRate() {
 		return travelRate;
 	}
-	
-	
-	
+
 }

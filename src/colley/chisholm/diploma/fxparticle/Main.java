@@ -1,8 +1,7 @@
 // Rachael Colley 2014
 
-package application;
+package colley.chisholm.diploma.fxparticle;
 
-import particle1.ParticleCanvas;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,7 +9,6 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-
 
 public class Main extends Application {
 
@@ -22,11 +20,12 @@ public class Main extends Application {
 		try {
 			root = new BorderPane();
 			scene = new Scene(root, 400, 400);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(
+					getClass().getResource("application.css").toExternalForm());
 			addComponentsToStage();
 			primaryStage.setScene(scene);
 			primaryStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -52,6 +51,5 @@ public class Main extends Application {
 		});
 		root.setCenter(button);
 	}
-
 
 }

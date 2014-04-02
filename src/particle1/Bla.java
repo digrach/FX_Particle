@@ -2,6 +2,8 @@ package particle1;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import colley.chisholm.diploma.fxparticle.Particle;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
