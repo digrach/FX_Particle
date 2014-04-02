@@ -44,6 +44,20 @@ public class Bla extends Stage {
 
 
 	public Bla() {
+		
+		
+		
+		timer = new AnimationTimer() {
+
+			@Override
+			public void handle(long arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
+		
+		
 
 	}
 

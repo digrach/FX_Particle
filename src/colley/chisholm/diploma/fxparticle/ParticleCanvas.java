@@ -64,7 +64,8 @@ public class ParticleCanvas extends Stage {
 			@Override
 			public void handle(long now) {
 
-				graphicsContext.setFill(Color.rgb(0, 0, 0, 0.2));
+				//graphicsContext.setFill(Color.rgb(0, 0, 0, 0.2));
+				graphicsContext.setFill(Color.BLACK);
 				graphicsContext.fillRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
 
 				checkList = new List[(int) canvas.getHeight()];
