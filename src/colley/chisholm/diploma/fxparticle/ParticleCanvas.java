@@ -64,8 +64,8 @@ public class ParticleCanvas extends Stage {
 			@Override
 			public void handle(long now) {
 
-				//graphicsContext.setFill(Color.rgb(0, 0, 0, 0.2));
-				graphicsContext.setFill(Color.BLACK);
+				graphicsContext.setFill(Color.rgb(0, 0, 0, 0.2));
+				//graphicsContext.setFill(Color.BLACK);
 				graphicsContext.fillRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
 
 				checkList = new List[(int) canvas.getHeight()];
@@ -75,9 +75,7 @@ public class ParticleCanvas extends Stage {
 
 				// Adds a new particle at specified interval.
 				if (countDownTillNextParticle == 0) {
-//					countDownTillNextParticle = 5 + (int) (Math.random() * 15);
-					countDownTillNextParticle = 5;// + (int) (Math.random() * 15);
-
+					countDownTillNextParticle = 5 + (int) (Math.random() * 15);
 					AddParticle();
 				}
 				countDownTillNextParticle--;
@@ -97,12 +95,9 @@ public class ParticleCanvas extends Stage {
 				makeMaxXCoord()) + buffer;
 		int randomTargety = makeRandomNumInRange(makeMinYCoord(),
 				makeMaxYCoord()) + buffer;
-		 int color = (int)(Math.random()* colors.length);
-		 Particle p = new Particle(randomx, randomy, randomTargetx,
-		 randomTargety, particleWidth, particleHeight, colors[color]);
-//		Color color = Color.WHITE;
-//		Particle p = new Particle(randomx, randomy, randomTargetx,
-//				randomTargety, particleWidth, particleHeight, color);
+				 int color = (int)(Math.random()* colors.length);
+				 Particle p = new Particle(randomx, randomy, randomTargetx,
+				 randomTargety, particleWidth, particleHeight, colors[color]);
 
 		particles.add(p);
 		System.out.println("List size:  " + particles.size());
@@ -126,36 +121,21 @@ public class ParticleCanvas extends Stage {
 			}
 			// Add the current particle to the array of lists at the index of y.
 			checkList[(int) p.getPosy()].add(p);
-			//checkForColision(p);
+			checkForColision(p);
 		}
 	}
 
 	public boolean checkForColision(Particle p) {
 		// Field to scan is the Particle's current y
-		// minus particleSize and plus particleSize.
-//		int startRowIndex = (int) (p.getPosy() - particleHeight);
-//		if (startRowIndex < 0) {
-//			startRowIndex = 0;
-//		}
-//		int endRowIndex = (int) (p.getPosy() + particleHeight);
-//		if (endRowIndex > checkList.length - 2) {
-//			endRowIndex = checkList.length - 2;
-//		}
-		
-//		int startRowIndex = (int) (p.getPosy() - p.getHeight());
-//		if (startRowIndex < 0) {
-//			startRowIndex = 0;
-//		}
-//		int endRowIndex = (int) (p.getPosy() + p.getHeight());
-//		if (endRowIndex > checkList.length - 2) {
-//			endRowIndex = checkList.length - 2;
-//		}
-		
-		int startRowIndex = (int) (p.getPosy() - p.getHeight() - 1);
+		// minus collisionSize - 1 and plus collisionSize - 1.
+
+		double collisionSize = 20;
+
+		int startRowIndex = (int) (p.getPosy() - collisionSize - 1);
 		if (startRowIndex < 0) {
 			startRowIndex = 0;
 		}
-		int endRowIndex = (int) (p.getPosy() + p.getHeight() - 1);
+		int endRowIndex = (int) (p.getPosy() + collisionSize - 1);
 		if (endRowIndex > checkList.length - 2) {
 			endRowIndex = checkList.length - 2;
 		}
@@ -168,37 +148,24 @@ public class ParticleCanvas extends Stage {
 
 				// Loop through each Particle in the list.
 				for (int i = 0; i < l.size(); i++) {
-					// Get current Particle in the list.
+
 					Particle cp = l.get(i);
-					// If the current Particle in the list is the one
-					// we are checking against (self), return.
-					if (cp == p) {
-						return false;
-					}
-
-					// if ((cp.getPosx() + particleWidth) >= (p.getPosx()) &&
-					// (cp.getPosx()) <= (p.getPosx() + particleWidth)) {
-					//
-					// p.setWidth(50);
-					// p.setHeight(50);
-					// cp.setWidth(50);
-					// cp.setHeight(50);
-					// System.out.println("*****************COLLIDE");
-					// return true;
-					// }
-
-					if ((cp.getPosx() + cp.getWidth()) >= (p.getPosx())
-							&& (cp.getPosx()) <= (p.getPosx() + p.getWidth())) {
-
-						double collisionSize = 50;
+				
+					// Only continue checking the current particle in the list
+					// if it is not the the particle we have just updated.
+					if (cp != p) {
 						
-						p.setWidth(collisionSize);
-						p.setHeight(collisionSize);
-						cp.setWidth(collisionSize);
-						cp.setHeight(collisionSize);
-						System.out
-								.println("***************************************************COLLIDE********");
-						return true;
+						if ((cp.getPosx() + cp.getWidth()) >= (p.getPosx())
+								&& (cp.getPosx()) <= (p.getPosx() + p.getWidth())
+								&& (cp.getPosy() + cp.getHeight()) >= (p.getPosy())
+								&& (cp.getPosy()) <= (p.getPosy() + p.getHeight())) {
+
+							p.setWidth(collisionSize);
+							p.setHeight(collisionSize);
+							cp.setWidth(collisionSize);
+							cp.setHeight(collisionSize);
+							return true;
+						}
 					}
 				}
 
@@ -206,8 +173,6 @@ public class ParticleCanvas extends Stage {
 
 		}
 		// Nothing found, return false.
-		System.out.println("*****************NO COLLISION");
-
 		return false;
 	}
 
@@ -248,12 +213,12 @@ public class ParticleCanvas extends Stage {
 		colors[0] = new RadialGradient(0, 0, 0.5, 0.5, 0.5, true,
 				CycleMethod.NO_CYCLE, new Stop(0, Color.WHITE), new Stop(0.2,
 						Color.hsb(59, 0.38, 1)), new Stop(0.6, Color.hsb(59,
-						0.38, 1, 0.1)), new Stop(1, Color.hsb(59, 0.38, 1, 0)));
+								0.38, 1, 0.1)), new Stop(1, Color.hsb(59, 0.38, 1, 0)));
 		for (int h = 0; h < 360; h += 2) {
 			colors[1 + (h / 2)] = new RadialGradient(0, 0, 0.5, 0.5, 0.5, true,
 					CycleMethod.NO_CYCLE, new Stop(0, Color.WHITE), new Stop(
 							0.2, Color.hsb(h, 1, 1)), new Stop(0.6, Color.hsb(
-							h, 1, 1, 0.1)), new Stop(1, Color.hsb(h, 1, 1, 0)));
+									h, 1, 1, 0.1)), new Stop(1, Color.hsb(h, 1, 1, 0)));
 		}
 	}
 
@@ -267,11 +232,11 @@ public class ParticleCanvas extends Stage {
 		root.setPrefSize(SCENE_WIDTH, SCENE_HEIGHT);
 
 		canvas = new Canvas(SCENE_WIDTH, SCENE_HEIGHT);
-		
+
 		// Set the mouse clicked attribute of the button.
 		// Override the EventHandler handle method in-line.
 		canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			
+
 			@Override
 			public void handle(MouseEvent arg0) {
 				print(arg0.getX() + " " + arg0.getY());
